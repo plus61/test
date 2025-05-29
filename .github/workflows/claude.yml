@@ -31,6 +31,9 @@ jobs:
     - name: Install Claude Code
       run: |
         npm install -g @anthropic-ai/claude-code
+        echo "Verifying installation..."
+        which claude-code
+        claude-code --version
 
     - name: Extract Claude command
       id: extract-command
@@ -51,8 +54,12 @@ jobs:
           git checkout ${{ github.event.pull_request.head.ref }}
         fi
         
+        # パスを確認
+        echo "PATH: $PATH"
+        which claude-code || echo "claude-code not found in PATH"
+        
         # Claude Codeを実行
-        claude-code "${{ steps.extract-command.outputs.command }}" --non-interactive
+        npx @anthropic-ai/claude-code "${{ steps.extract-command.outputs.command }}" --non-interactive
         
     - name: Commit and push changes
       run: |

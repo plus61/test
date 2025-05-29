@@ -1,0 +1,26 @@
+name: Debug Test
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  debug:
+    if: contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Debug Info
+      run: |
+        echo "Workflow triggered!"
+        echo "Comment body: ${{ github.event.comment.body }}"
+        echo "Event name: ${{ github.event_name }}"
+        echo "Repository: ${{ github.repository }}"
+        
+    - name: Post Debug Comment
+      run: |
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "${{ github.event.issue.comments_url }}" \
+          -d '{"body":"🐛 Debug: Workflow triggered successfully!"}'

@@ -60,9 +60,9 @@ jobs:
         echo "Files in current directory:"
         ls -la
         
-        # Claude Codeを実行（npxを使用）
+        # Claude Codeを実行（-pフラグでヘッドレスモード）
         echo "Running Claude Code with command: ${{ steps.extract-command.outputs.command }}"
-        npx @anthropic-ai/claude-code "${{ steps.extract-command.outputs.command }}" --non-interactive
+        npx @anthropic-ai/claude-code -p "${{ steps.extract-command.outputs.command }}"
         
     - name: Commit and push changes
       run: |
